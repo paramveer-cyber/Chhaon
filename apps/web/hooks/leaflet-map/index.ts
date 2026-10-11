@@ -23,7 +23,9 @@ export const useLeafletMap = (
       if (isCancelled) return;
       createdMap = leaflet.map(mapContainer, { center: defaultMapCenter, zoom: defaultMapZoom, ...mapOptions });
       const tiles = mapTileStyles[tileStyle];
-      leaflet.tileLayer(tiles.url, { attribution: tiles.attribution, maxZoom: maximumTileZoom }).addTo(createdMap);
+      leaflet
+        .tileLayer(tiles.url, { attribution: tiles.attribution, maxZoom: maximumTileZoom, className: tiles.className })
+        .addTo(createdMap);
       if (tiles.overlayUrl) leaflet.tileLayer(tiles.overlayUrl, { maxZoom: maximumTileZoom }).addTo(createdMap);
       setMapContext({ leaflet, map: createdMap });
     });

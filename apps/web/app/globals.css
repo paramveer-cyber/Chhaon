@@ -214,3 +214,8 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* calm base map: OpenStreetMap tiles with less colour, so the heat layer and pins lead */
+.tiles-calm {
+  filter: grayscale(0.85) sepia(0.12) brightness(1.04) contrast(0.92);
+}

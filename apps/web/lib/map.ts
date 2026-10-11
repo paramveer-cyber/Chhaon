@@ -4,12 +4,13 @@ export const tileAttribution = "&copy; OpenStreetMap contributors";
 export type MapTileStyle = "street" | "light" | "satellite";
 
 /** Base layers. "light" is a calm, low-contrast street map that lets the heat colours lead. */
-export const mapTileStyles: Record<MapTileStyle, { url: string; attribution: string; overlayUrl?: string }> = {
+export const mapTileStyles: Record<
+  MapTileStyle,
+  { url: string; attribution: string; overlayUrl?: string; className?: string }
+> = {
   street: { url: tileLayerUrl, attribution: tileAttribution },
-  light: {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-  },
+  // OpenStreetMap tiles, softened with CSS (see .tiles-calm in globals.css); needs no API key
+  light: { url: tileLayerUrl, attribution: tileAttribution, className: "tiles-calm" },
   satellite: {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "Imagery &copy; Esri, Maxar",
