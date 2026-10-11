@@ -940,7 +940,15 @@ Chhaon was built so that growth needs small changes.
 
 ## 21. Credits
 
-- Built from a tRPC monorepo starter template. Add the starter name and link here.
+**Team**
+
+| Name | Role |
+| --- | --- |
+| Ishaan Gupta ([@ishaangupta-beep](https://github.com/ishaangupta-beep)) | Product and UI/UX design, frontend (ward office and public app) |
+| Paramveer ([@paramveer-cyber](https://github.com/paramveer-cyber)) | Backend, data pipeline, heat score, daily plan, AWS deployment |
+
+**Data and services**
+
 - Satellite data: USGS Landsat and ESA Copernicus Sentinel-2, through Google Earth Engine and AWS Open Data.
 - Weather: Open-Meteo.
 - Population: WorldPop.

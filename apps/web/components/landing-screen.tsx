@@ -174,7 +174,10 @@ export const LandingScreen = () => (
 
     <footer className="flex flex-col gap-2 border-t border-line pt-6 pb-4">
       <p className="font-body text-sm text-ink-faint">{demoScopeNote}</p>
-      <p className="font-body text-sm text-ink-faint">Made for Environmental Hacks 2026, Heat and Water track.</p>
+      <p className="font-body text-sm text-ink-faint">
+        Made for Environmental Hacks 2026, Heat and Water track, by Ishaan Gupta (design and frontend) and Paramveer
+        (backend, data and AWS).
+      </p>
     </footer>
   </main>
 );
