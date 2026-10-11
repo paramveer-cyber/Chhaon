@@ -114,9 +114,9 @@
   --color-heat-medium: #d16d37;
   --color-heat-medium-soft: #f6e0d2;
   --color-heat-medium-deep: #5e2a0c;
-  --color-heat-low: #e6b44c;
-  --color-heat-low-soft: #f7ebcc;
-  --color-heat-low-deep: #6e510f;
+  --color-heat-low: #2e9e5b;
+  --color-heat-low-soft: #dcefe0;
+  --color-heat-low-deep: #17472b;
 }
 
 :root {

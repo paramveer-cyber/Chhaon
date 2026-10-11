@@ -20,7 +20,7 @@ export const publicCopy = {
     near: (name: string) => `Near ${name}`,
     yourSpot: "Your spot",
     change: "Change",
-    heatTitle: { high: "Extreme heat today", medium: "High heat today", low: "Hot today" } satisfies Record<HeatLevel, string>,
+    heatTitle: { high: "Extreme heat today", medium: "High heat today", low: "Low heat today" } satisfies Record<HeatLevel, string>,
     heatAdvice: {
       high: "Stay out of the sun from 12 to 4 pm. Drink water every 20 minutes.",
       medium: "Avoid hard work outdoors after noon. Carry water.",
@@ -66,7 +66,7 @@ export const publicCopy = {
     near: (name: string) => `${name} के पास`,
     yourSpot: "आपकी जगह",
     change: "बदलें",
-    heatTitle: { high: "आज भीषण गर्मी है", medium: "आज बहुत गर्मी है", low: "आज गर्मी है" } satisfies Record<HeatLevel, string>,
+    heatTitle: { high: "आज भीषण गर्मी है", medium: "आज बहुत गर्मी है", low: "आज गर्मी कम है" } satisfies Record<HeatLevel, string>,
     heatAdvice: {
       high: "दोपहर 12 से 4 बजे तक धूप से बचें। हर 20 मिनट में पानी पिएँ।",
       medium: "दोपहर बाद बाहर भारी काम न करें। पानी साथ रखें।",

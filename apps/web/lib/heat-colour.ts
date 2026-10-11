@@ -1,10 +1,11 @@
 type RgbColour = [number, number, number];
 
 const heatColourStops: { position: number; colour: RgbColour }[] = [
-  { position: 0, colour: [247, 235, 204] },
-  { position: 0.4, colour: [230, 180, 76] },
-  { position: 0.7, colour: [209, 109, 55] },
-  { position: 1, colour: [162, 48, 42] },
+  { position: 0, colour: [46, 158, 91] },
+  { position: 0.25, colour: [167, 201, 74] },
+  { position: 0.5, colour: [242, 212, 61] },
+  { position: 0.75, colour: [240, 138, 60] },
+  { position: 1, colour: [195, 38, 46] },
 ];
 
 export const heatScoreScaleMaximum = 100;
