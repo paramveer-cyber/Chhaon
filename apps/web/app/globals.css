@@ -219,3 +219,19 @@
 .tiles-calm {
   filter: grayscale(0.85) sepia(0.12) brightness(1.04) contrast(0.92);
 }
+
+/* public app inside the desktop phone frame: fill the screen, not the browser window */
+@media (min-width: 768px) {
+  .phone-scroll .h-dvh {
+    height: 100%;
+  }
+  .phone-scroll .min-h-dvh {
+    min-height: 100%;
+  }
+  .phone-scroll {
+    scrollbar-width: none;
+  }
+  .phone-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -316,9 +316,12 @@ export const PublicApp = () => {
                 <button
                   key={place.id}
                   type="button"
-                  onClick={() => {
+                  onClick={(event) => {
                     setSelectedPlaceId(place.id);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    // inside the desktop phone frame the screen scrolls, not the window
+                    const screen = event.currentTarget.closest(".phone-scroll");
+                    if (screen && screen.scrollHeight > screen.clientHeight) screen.scrollTo({ top: 0, behavior: "smooth" });
+                    else window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="flex min-h-[68px] items-center gap-3.5 bg-surface px-4 py-3 text-left hover:bg-[#FBF8F2]"
                 >
