@@ -274,7 +274,7 @@ export const PublicApp = () => {
           </div>
           <p className="font-body text-[14px] text-ink-faint">{copy.opensMaps}</p>
           <div className="border-t border-line pt-3">
-            <ReportForm coolingPointId={selectedPlace.id} />
+            <ReportForm coolingPointId={selectedPlace.id} language={language} />
           </div>
         </section>
       )}

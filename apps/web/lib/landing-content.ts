@@ -173,8 +173,8 @@ export const roadmapItems: RoadmapItem[] = [
   },
   {
     Icon: Languages,
-    title: "Hindi and more languages",
-    description: "The body font already supports Devanagari. Text moves to a translation file.",
+    title: "More Indian languages",
+    description: "The public app already speaks English and Hindi. Bengali, Punjabi and Urdu come next from the same copy file.",
     horizon: "Later",
   },
 ];
