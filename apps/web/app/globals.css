@@ -44,6 +44,81 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme {
+  --animate-rise: rise 420ms ease-out both;
+  --animate-pop: pop 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-bar-grow: bar-grow 900ms ease-out both;
+  --animate-heat-cell: heat-cell 1.6s ease-in-out infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes bar-grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes heat-cell {
+    0%,
+    100% {
+      background-color: var(--color-heat-low);
+      transform: scale(0.85);
+    }
+    50% {
+      background-color: var(--color-heat-high);
+      transform: scale(1);
+    }
+  }
+
+  --font-heading: var(--font-schibsted), sans-serif;
+  --font-body: var(--font-mukta), sans-serif;
+  --font-brand: var(--font-outfit), sans-serif;
+  --color-page: #f5f1e9;
+  --color-surface: #fffdf9;
+  --color-ink: #1c1a16;
+  --color-ink-soft: #4a453c;
+  --color-ink-faint: #6b655a;
+  --color-line: #e6dfd1;
+  --color-brand: #0b6e6a;
+  --color-brand-deep: #08524f;
+  --color-brand-soft: #ddede9;
+  --color-sun: #f08a3c;
+  --color-sun-soft: #fbe6d2;
+  --color-sun-deep: #8a3f0b;
+  --color-heat-high: #a2302a;
+  --color-heat-high-soft: #f2dad5;
+  --color-heat-high-deep: #5a1915;
+  --color-heat-medium: #d16d37;
+  --color-heat-medium-soft: #f6e0d2;
+  --color-heat-medium-deep: #5e2a0c;
+  --color-heat-low: #2e9e5b;
+  --color-heat-low-soft: #dcefe0;
+  --color-heat-low-deep: #17472b;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -114,10 +189,28 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+.heat-image-overlay {
+  image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

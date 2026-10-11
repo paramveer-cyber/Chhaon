@@ -9,11 +9,5 @@ export const createTRPCHttpBatchClientClient = (opts?: CreateTRPCHttpBatchClient
   const c = opts?.enableStreaming ? httpBatchStreamLink : httpLink;
   return c({
     url: env.NEXT_PUBLIC_API_URL ?? "/trpc",
-    fetch(url, options) {
-      return fetch(url, {
-        ...options,
-        credentials: "include",
-      });
-    },
   });
 };

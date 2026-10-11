@@ -1,5 +1,10 @@
 {
   "name": "@repo/database",
+  "exports": {
+    ".": "./index.ts",
+    "./models/*": "./models/*.ts",
+    "./queries/*": "./queries/*/index.ts"
+  },
   "version": "1.0.0",
   "scripts": {
     "db:migrate": "dotenv -- drizzle-kit migrate",

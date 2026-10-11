@@ -1,0 +1,12 @@
+export const tileLayerUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+export const tileAttribution = "&copy; OpenStreetMap contributors";
+export const maximumTileZoom = 19;
+export const defaultMapCenter: [number, number] = [28.64, 77.12];
+export const defaultMapZoom = 10;
+export const placeFocusZoom = 15;
+export const mapPaddingInPixels: [number, number] = [40, 40];
+export const heatOverlayOpacity = 0.78;
+export const userMarkerColour = "#2F7FE0";
+export const routeLineColour = "#0B6E6A";
+export const initialHeatMapCenter: [number, number] = [28.6139, 77.209];
+export const initialHeatMapZoom = 12;

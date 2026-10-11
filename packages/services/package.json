@@ -2,16 +2,42 @@
   "name": "@repo/services",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "test": "tsx --test heat/formulas.test.ts plan/coverage.test.ts"
+  },
+  "exports": {
+    "./api-response": "./api-response/index.ts",
+    "./baseline": "./baseline/index.ts",
+    "./baseline/earth-engine": "./baseline/earth-engine.ts",
+    "./baseline/grid": "./baseline/grid.ts",
+    "./baseline/population": "./baseline/population.ts",
+    "./baseline/satellite": "./baseline/satellite.ts",
+    "./config": "./config.ts",
+    "./cooling-point": "./cooling-point/index.ts",
+    "./describe-error": "./describe-error/index.ts",
+    "./directions": "./directions/index.ts",
+    "./geo": "./geo/index.ts",
+    "./heat": "./heat/index.ts",
+    "./http": "./http/index.ts",
+    "./plan": "./plan/index.ts",
+    "./weather": "./weather/index.ts"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "@types/proj4": "^2.19.0",
     "dotenv-cli": "^11.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@aws-sdk/client-geo-routes": "^3.1149.0",
+    "@aws-sdk/client-s3": "^3.1149.0",
     "@repo/database": "workspace:*",
     "@repo/logger": "workspace:*",
-    "google-auth-library": "^10.5.0",
+    "geotiff": "^3.0.5",
+    "proj4": "^2.22.0",
     "zod": "^4.3.5"
   }
 }
