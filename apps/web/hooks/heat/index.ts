@@ -7,7 +7,7 @@ export type HeatLevel = HeatGrid["cells"][number]["heatLevel"];
 
 export const useHeatGrid = (date: string | undefined) => trpc.heat.getHeatGrid.useQuery({ date });
 
-export const useHeatAtLocation = (userLocation: UserLocation | undefined) =>
-  trpc.heat.getHeatAtLocation.useQuery(userLocation as UserLocation, {
+export const useHeatAtLocation = (userLocation: UserLocation | undefined, date?: string) =>
+  trpc.heat.getHeatAtLocation.useQuery({ ...(userLocation as UserLocation), date }, {
     enabled: userLocation !== undefined,
   });

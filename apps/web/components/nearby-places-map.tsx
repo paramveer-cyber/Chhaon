@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useLeafletMap } from "~/hooks/leaflet-map";
 import type { NearestPlace } from "~/hooks/cooling-point";
 import type { UserLocation } from "~/hooks/user-location";
-import { mapPaddingInPixels, routeLineColour } from "~/lib/map";
+import { mapPaddingInPixels, routeLineColour, type MapTileStyle } from "~/lib/map";
 import { buildNumberedPinIcon, buildUserMarker } from "~/lib/map-markers";
 
 type NearbyPlacesMapProps = {
@@ -12,7 +12,10 @@ type NearbyPlacesMapProps = {
   places: NearestPlace[];
   selectedPlaceId: number | undefined;
   onSelectPlace: (placeId: number) => void;
-  onChooseLocation: (chosenLocation: UserLocation) => void;
+  onChooseLocation?: (chosenLocation: UserLocation) => void;
+  tileStyle?: MapTileStyle;
+  /** small embedded map: no zoom buttons */
+  compact?: boolean;
 };
 
 export const NearbyPlacesMap = ({
@@ -21,12 +24,14 @@ export const NearbyPlacesMap = ({
   selectedPlaceId,
   onSelectPlace,
   onChooseLocation,
+  tileStyle,
+  compact = false,
 }: NearbyPlacesMapProps) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapContext = useLeafletMap(mapContainerRef);
+  const mapContext = useLeafletMap(mapContainerRef, tileStyle, { zoomControl: !compact });
 
   useEffect(() => {
-    if (!mapContext) return;
+    if (!mapContext || !onChooseLocation) return;
     const { map } = mapContext;
     const handleMapClick = ({ latlng }: { latlng: { lat: number; lng: number } }) =>
       onChooseLocation({ latitude: latlng.lat, longitude: latlng.lng });

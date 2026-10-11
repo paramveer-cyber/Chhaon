@@ -1,5 +1,5 @@
-import { PublicScreen } from "~/components/public-screen";
+import { PublicApp } from "~/components/public/public-app";
 
 export default function PublicPage() {
-  return <PublicScreen />;
+  return <PublicApp />;
 }

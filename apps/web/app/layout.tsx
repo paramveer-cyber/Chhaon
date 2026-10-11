@@ -5,7 +5,7 @@ import "./globals.css";
 import { GlobalProviders } from "~/providers/global";
 
 const headingFont = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-schibsted" });
-const bodyFont = Mukta({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-mukta" });
+const bodyFont = Mukta({ subsets: ["latin", "devanagari"], weight: ["400", "500", "600", "700"], variable: "--font-mukta" });
 const brandFont = Outfit({ subsets: ["latin"], weight: ["500"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${headingFont.variable} ${bodyFont.variable} ${brandFont.variable} bg-page font-body text-ink`}>
         <GlobalProviders>{children}</GlobalProviders>
       </body>

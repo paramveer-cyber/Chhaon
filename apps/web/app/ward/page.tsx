@@ -1,5 +1,5 @@
-import { WardScreen } from "~/components/ward-screen";
+import { WardControlRoom } from "~/components/ward/ward-control-room";
 
 export default function WardPage() {
-  return <WardScreen />;
+  return <WardControlRoom />;
 }
