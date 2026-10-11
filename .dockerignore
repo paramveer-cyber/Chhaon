@@ -3,4 +3,11 @@
 **/dist
 **/.next
 **/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.tif
+**/*.tiff
+**/gee-key.json
+**/*key*.json
 apps/web
