@@ -188,7 +188,6 @@ The project is a pnpm and Turborepo monorepo. All code is TypeScript.
 │   └── typescript-config           shared TypeScript settings
 ├── turbo.json
 ├── pnpm-workspace.yaml
-├── amplify.yml                     build file for AWS Amplify Hosting
 └── setup.sh                        links the root .env into each package
 ```
 
@@ -635,19 +634,56 @@ Next.js, React, Tailwind CSS v4, shadcn/ui, Leaflet, and TanStack Query. The tRP
                   "See the heat map"  |             |  "Find a cool place near me"
                                       v             v
         +---------------------------------+   +---------------------------------+
-        |  /ward   Heat map and plan      |   |  /public   Find a cool place    |
+        |  /ward   Delhi today            |   |  /public   Find a cool place    |
         |                                 |   |                                 |
-        |  Date control (hot day default) |   |  1 Where are you?               |
-        |  Heat map, 250 m cells          |   |      use location or tap map    |
-        |  High / Medium / Low filter     |   |  2 How hot is it here?          |
-        |  Stats: places, before, after   |   |      level + advice             |
-        |  Ranked list of 10 places       |   |  3 Nearest cooling points       |
-        |  Pins linked to the list        |   |      route, time, directions    |
-        |                                 |   |      report a problem           |
+        |  Stats: high-heat cells,        |   |  1 Where are you?               |
+        |    covered now, after the plan  |   |      satellite map, centre pin, |
+        |  Coverage alert + progress bar  |   |      or live location           |
+        |  Heat map, 250 m cells          |   |  2 Results                      |
+        |  High / Medium / Low + counts   |   |      heat card + advice         |
+        |  Ranked cards for 10 places     |   |      nearest place, route,      |
+        |    search, ask to open, detail  |   |      directions, WhatsApp share |
+        |  Date control (hot day default) |   |      mini map, more nearby      |
+        |                                 |   |      112 / 1077, report a place |
         +----------------+----------------+   +----------------+----------------+
                          |                                     |
                          +---------- cross links --------------+
 ```
+
+**Ward office (`/ward`)**, desktop:
+
+- **Header stats.** High-heat cells, the share of high-risk people covered now, and the share after the plan.
+- **Coverage alert.** A red alert ("Only 6.4% of high-risk people live within a 10-minute walk…") with a now → after progress bar and a **High heat only** switch.
+- **Data line.** Lists every source: Landsat, Sentinel-2 on AWS Open Data, WorldPop, Open-Meteo and Amazon Location.
+- **Heat map.** Heat cells on a softened OpenStreetMap base, with High / Medium / Low filters that show cell counts. The numbered pins show state: to open, asked, or selected.
+- **Places to open.** Ranked cards with search, All / Not asked tabs, water and hours tags, a bar for people newly reached, **Ask to open**, **Ask all**, and Directions.
+- **Detail panel.** Selecting a place opens a panel ("Rank 3 of 10 … brings 18,364 more high-risk people within a 10-minute walk") and flies the map to it.
+- **Ask to open storage.** This state lives in the browser (`localStorage`), per date. The API has no write for it yet. See [How to grow the project](#20-how-to-grow-the-project).
+
+**Public (`/public`)**, phone first:
+
+- **Pick a spot.** A satellite map of Delhi with a fixed centre pin: you move the map, not the pin. You can also share your live location. A spot outside Delhi gets a clear message.
+- **Results.**
+  - A heat card shows the level, the "feels like" temperature and advice.
+  - The nearest cooling point shows its walking distance along the route, so distance and time agree.
+  - Get directions opens Google Maps. Share sends a WhatsApp message.
+  - A mini map shows the route. A "More nearby" list switches the main card.
+- **Help.** Tap to call **112** (emergency) and **1077** (Delhi disaster helpline), plus a note for people without a smartphone.
+- **Same day as the ward screen.** The public heat uses the same demo day as `/ward` (`demoHotDate`), so both screens agree.
+- **English and Hindi.** One toggle switches every label and every piece of advice, and the phone remembers the choice. Place names stay as they are in OpenStreetMap.
+- **On a laptop**, the public app sits inside an interactive iPhone frame next to a short description, so it can be demoed beside the ward screen. On a phone it fills the screen.
+
+**Main components**
+
+| Component | File |
+| --- | --- |
+| Ward office screen | `components/ward/ward-control-room.tsx` |
+| Ward heat map and pins | `components/ward/control-map.tsx` |
+| Public app (picker and results) | `components/public/public-app.tsx` |
+| Centre-pin satellite picker | `components/public/pick-map.tsx` |
+| Desktop phone frame | `components/public/phone-stage.tsx` |
+| English and Hindi copy, date format | `lib/public-copy.ts` |
+| Walking route length | `lib/route.ts` |
 
 ### Hooks (layer 4)
 
@@ -656,8 +692,8 @@ Next.js, React, Tailwind CSS v4, shadcn/ui, Leaflet, and TanStack Query. The tRP
 | `hooks/heat`            | `useHeatGrid`, `useHeatAtLocation`               | `heat.getHeatGrid`, `heat.getHeatAtLocation` |
 | `hooks/plan`            | `usePlan`                                        | `plan.getPlan`                               |
 | `hooks/cooling-point`   | `useNearestCoolingPoints`, `useReportCorrection` | `coolingPoint.*`                             |
-| `hooks/user-location`   | `useUserLocation`                                | Browser geolocation, map tap                 |
-| `hooks/leaflet-map`     | `useLeafletMap`                                  | Creates and removes a Leaflet map            |
+| `hooks/user-location`   | `useUserLocation`                                | Browser geolocation, map pin                 |
+| `hooks/leaflet-map`     | `useLeafletMap`                                  | Creates a Leaflet map: street, calm or satellite tiles |
 | `hooks/cycling-message` | `useCyclingMessage`                              | Loading messages                             |
 | `hooks/animated-number` | `useAnimatedNumber`                              | Count-up numbers                             |
 
@@ -702,14 +738,13 @@ Each interaction answers a thing the user will do next.
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | The heat map loads                 | A grid of cells pulses from green to red in a diagonal wave. A message changes every 2 seconds, for example "Asking Landsat how hot the pavement is…" |
 | The plan or nearest list loads     | Skeleton cards and a cycling message                                                                                                                  |
-| Numbers arrive                     | Coverage, counts, and temperature count up                                                                                                            |
 | A new plan arrives                 | The coverage bar grows from the left                                                                                                                  |
-| The user taps a map pin            | The matching card scrolls into view                                                                                                                   |
-| The user presses "Use my location" | A radar ping on the icon                                                                                                                              |
-| The location is set                | The map point pulses                                                                                                                                  |
-| Step 1 is not done                 | Steps 2 and 3 show a bouncing arrow and "Set your place in step 1"                                                                                    |
+| The officer taps a pin or a card   | The map flies to the place and the detail panel opens at the top of the list                                                                         |
+| The officer asks a place to open   | The card shows "Asked at 16:52" with an undo, and the pin becomes dashed                                                                            |
+| The person moves the map           | The centre pin stays put, labelled "Your spot"                                                                                                         |
+| The person picks a place below     | The main card switches to that place and the screen scrolls back up                                                                                  |
 | A report is sent                   | A check mark pops in                                                                                                                                  |
-| The user hovers a card or link     | The card lifts and the arrow slides                                                                                                                   |
+| Data fails to load                 | A plain message with a "Try again" button                                                                                                              |
 | The user prefers reduced motion    | All animation becomes almost instant                                                                                                                  |
 
 **Info hints.** A small info button sits next to every term that needs an explanation: the stats, the map title, and the water and hours tags. It opens on tap or click, so it also works on phones.
@@ -756,24 +791,20 @@ Each interaction answers a thing the user will do next.
 - Landsat surface temperature: Google Earth Engine.
 - Population: a WorldPop file read from local disk by the baseline job.
 
-### Frontend and the API: one origin
+### Frontend and the API
 
-The API uses HTTP. A browser blocks an HTTPS page that calls an HTTP API. Chhaon avoids this with a rewrite in `apps/web/next.config.js`.
+The frontend is on Vercel and the API runs on EC2. The browser calls the API directly over HTTPS at its own host name (`chhaon.<elastic-ip>.sslip.io`), so an HTTPS page never calls an HTTP address.
 
 ```
-   Browser (HTTPS)                 Frontend host                  EC2 API (HTTP)
-        |                         (Next.js server)                      |
-        |  GET /trpc/heat...             |                              |
-        |------------------------------->|                              |
-        |       same origin              |  rewrite to API_ORIGIN       |
-        |                                |----------------------------->|
-        |                                |<-----------------------------|
-        |<-------------------------------|                              |
+   Browser (HTTPS)                                   EC2 API (HTTPS, sslip.io name)
+        |  GET /trpc/heat.getHeatGrid?input=...              |
+        |--------------------------------------------------->|
+        |<---------------------------------------------------|
 ```
 
-- Leave `NEXT_PUBLIC_API_URL` unset in the deployed frontend. The client then calls `/trpc` on its own origin.
-- Set `API_ORIGIN` to the API address, for example `http://<elastic-ip>:8000`. Set it before the build.
-- With this design, the browser sees one origin. CORS does not apply.
+- Set `NEXT_PUBLIC_API_URL` in the frontend to the API's tRPC address, for example `https://chhaon.<elastic-ip>.sslip.io/trpc`. Set it before the build.
+- Set `CORS_ORIGIN` on the API to the frontend's address, so the browser may call it.
+- Without `NEXT_PUBLIC_API_URL`, the client calls `/trpc` on its own origin. This is useful when a proxy in front of both serves one origin.
 
 ---
 
@@ -799,8 +830,7 @@ bash setup.sh
 | `LOGGER_LEVEL`          | API            | `debug` or `info`                            |
 | `CORS_ORIGIN`           | API            | The one origin that may call the API         |
 | `AWS_REGION`            | API            | `ap-southeast-2`                             |
-| `NEXT_PUBLIC_API_URL`   | Frontend       | Full tRPC URL. Leave unset to use `/trpc`    |
-| `API_ORIGIN`            | Frontend build | API address for the rewrite                  |
+| `NEXT_PUBLIC_API_URL`   | Frontend build | Full tRPC URL of the API. Unset: `/trpc`     |
 | `WORLDPOP_FILE_PATH`    | Baseline job   | Path to the WorldPop GeoTIFF                 |
 | `EARTH_ENGINE_KEY_FILE` | Baseline job   | Path to the Earth Engine service account key |
 
@@ -849,7 +879,7 @@ sudo docker run -d --restart always --name chhaon-api -p 8000:8000 \
 
 **Change an environment value.** Edit `~/chhaon.env`. Then remove and start the container again, as in the last step. A plain restart does not read the file again.
 
-**Frontend.** Connect the repository to a host that runs Next.js (Vercel or AWS Amplify Hosting). Set the root to `apps/web`. Set `API_ORIGIN`. Do not set `NEXT_PUBLIC_API_URL`. The file `amplify.yml` holds the Amplify build steps.
+**Frontend.** The frontend is on Vercel. A push to `main` deploys it, and a push to any other branch gets its own preview link. Set the root to `apps/web` and set `NEXT_PUBLIC_API_URL` to the API's tRPC address. AWS Amplify Hosting also works with the same settings.
 
 ---
 
